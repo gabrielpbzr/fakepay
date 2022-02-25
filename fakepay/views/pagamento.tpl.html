@@ -1,0 +1,42 @@
+%rebase('template.tpl')
+<div class="container">
+    % if pagamento.situacao == 'CRIADO':
+    <div class="card m-3">
+        <div class="card-body">
+
+            <h1>Pagar Guia</h1>
+            <div>
+                <p>Valor: R$ {{pagamento.valor}}</p>
+            </div>
+            <form id="form-pagamento" class="form" method="post">
+                <div class="row">
+                    <div class="form-group">
+                        <label for="forma-pagamento" class="control-label">Pagar com:</label>
+                        <div class="form-check">
+                            <input type="radio" id="radio-boleto" name="formapagamento" value="BOLETO" checked>
+                            <label for="radio-boleto">Boleto</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" id="radio-cartao" name="formapagamento" value="CARTAO">
+                            <label for="radio-cartao">Cartão</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" id="radio-pix" name="formapagamento" value="PIX">
+                            <label for="radio-pix">PIX</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="submit" id="btn-pagar" class="btn btn-primary col-lg-3 mt-3">Pagar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    % end
+    % if pagamento.situacao == 'CONCLUIDO':
+    <div class="alert alert-success mt-3" role="alert">
+        <span>Pagamento concluído com sucesso!</span>
+    </div>
+    % end
+
+</div>

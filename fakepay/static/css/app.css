@@ -1,0 +1,16 @@
+.top-navbar {
+    background-color: green;
+    padding: 1em;
+}
+
+.top-navbar .brand {
+    text-decoration: none;
+    color: #e2e2e2;
+    font-family: 'Anton', sans-serif;
+    font-size: 2em;
+}
+
+.top-navbar a :link, a :visited {
+    text-decoration: none;
+    color: #e2e2e2;
+}
