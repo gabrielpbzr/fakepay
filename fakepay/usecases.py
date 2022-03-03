@@ -11,7 +11,7 @@ class SolicitarPagamento:
 
     def executar(self, solicitacao) -> Pagamento:
         pagamento = Pagamento(valor=solicitacao.total(), url_pagamento="")
-        pagamento.url_pagamento = "/pagar/%s" % (pagamento._id)
+        pagamento.url_pagamento = "/pagar/%s" % pagamento.id
         self.repositorio.salvar(pagamento)
         return pagamento
 
@@ -30,6 +30,6 @@ class ExecutarPagamento:
     def __init__(self, repositorio: RepositorioPagamentos):
         self.repositorio = repositorio
 
-    def executar(self, pagamento: Pagamento) -> bool:
+    def executar(self, pagamento: Pagamento):
         pagamento.concluir()
         self.repositorio.atualizar(pagamento)

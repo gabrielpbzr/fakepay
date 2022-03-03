@@ -1,14 +1,18 @@
-import imp
-import unittest
+import os
+from unittest import TestCase, mock
 from fakepay import config
-from os import environ
+
 
 DATABASE_URL = "postgres://username:password@database.host.dev:5432/fakepay"
 
 
-class ConfigTest(unittest.TestCase):
-    def setUp(self) -> None:
-        environ.setdefault("DATABASE_URL", DATABASE_URL)
+@mock.patch.dict(os.environ, {"DATABASE_URL": DATABASE_URL})
+class ConfigTest(TestCase):
 
     def test_load_database_config(self):
-        self.assertEqual(DATABASE_URL, config.database_url())
+        config.load_values()
+        self.assertEqual("username", config.database['user'])
+        self.assertEqual("password", config.database['password'])
+        self.assertEqual("database.host.dev", config.database['host'])
+        self.assertEqual("5432", config.database['port'])
+        self.assertEqual("fakepay", config.database['dbname'])

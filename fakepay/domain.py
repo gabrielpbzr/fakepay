@@ -90,6 +90,10 @@ class Pagamento:
 
         return obj
 
+    @property
+    def id(self):
+        return self._id
+
 
 class RepositorioPagamentos:
     """
@@ -102,7 +106,7 @@ class RepositorioPagamentos:
     def salvar(self, pagamento: Pagamento) -> None:
         stmt = self.db.cursor()
         sql = "INSERT INTO pagamentos(id, data_criacao, data_atualizacao, valor, situacao) VALUES (?, ?, ?, ?, ?)"
-        stmt.execute(sql, (pagamento._id,
+        stmt.execute(sql, (pagamento.id,
                            pagamento.data_criacao.strftime(DATETIME_FORMAT),
                            pagamento.data_atualizacao.strftime(
                                DATETIME_FORMAT),
@@ -118,7 +122,7 @@ class RepositorioPagamentos:
                                DATETIME_FORMAT),
                            "{:.2f}".format(pagamento.valor),
                            pagamento.situacao,
-                           pagamento._id,))
+                           pagamento.id,))
         self.db.commit()
         stmt.close()
 
@@ -135,7 +139,6 @@ class RepositorioPagamentos:
         return pagamento
 
     def db_row_to_pagamento(self, row):
-
         if not row:
             return None
         pagamento = Pagamento(valor=float(row[3]),
