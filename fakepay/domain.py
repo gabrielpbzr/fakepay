@@ -105,7 +105,7 @@ class RepositorioPagamentos:
 
     def salvar(self, pagamento: Pagamento) -> None:
         stmt = self.db.cursor()
-        sql = "INSERT INTO pagamentos(id, data_criacao, data_atualizacao, valor, situacao) VALUES (?, ?, ?, ?, ?)"
+        sql = "INSERT INTO pagamentos(id, data_criacao, data_atualizacao, valor, situacao) VALUES (%s, %s, %s, %s, %s)"
         stmt.execute(sql, (pagamento.id,
                            pagamento.data_criacao.strftime(DATETIME_FORMAT),
                            pagamento.data_atualizacao.strftime(
@@ -116,21 +116,21 @@ class RepositorioPagamentos:
 
     def atualizar(self, pagamento: Pagamento) -> None:
         stmt = self.db.cursor()
-        sql = "UPDATE pagamentos SET data_criacao = ?, data_atualizacao = ?, valor = ?, situacao = ? WHERE id = ?"
+        sql = "UPDATE pagamentos SET data_criacao = %s, data_atualizacao = %s, valor = %s, situacao = %s WHERE id = %s"
         stmt.execute(sql, (pagamento.data_criacao.strftime(DATETIME_FORMAT),
                            pagamento.data_atualizacao.strftime(
                                DATETIME_FORMAT),
                            "{:.2f}".format(pagamento.valor),
                            pagamento.situacao,
-                           pagamento.id,))
+                           pagamento.id))
         self.db.commit()
         stmt.close()
 
     def buscar_por_id(self, id_pagamento: str):
         stmt = self.db.cursor()
-        sql = "SELECT id, data_criacao, data_atualizacao, valor, situacao, id_transacao, servico_pagamento \
-        FROM pagamentos WHERE id = :id"
-        stmt.execute(sql, {'id': id_pagamento})
+        sql = "SELECT id, data_criacao, data_atualizacao, valor, situacao, id_transacao, servico_pagamento " \
+              "FROM pagamentos WHERE id = %s"
+        stmt.execute(sql, (id_pagamento,))
         row = stmt.fetchone()
 
         pagamento = self.db_row_to_pagamento(row)
@@ -143,9 +143,9 @@ class RepositorioPagamentos:
             return None
         pagamento = Pagamento(valor=float(row[3]),
                               url_pagamento="",
-                              data_criacao=datetime.fromisoformat(row[1]),
+                              data_criacao=datetime.fromisoformat(str(row[1])),
                               _id=row[0])
-        pagamento.data_atualizacao = datetime.fromisoformat(row[2])
+        pagamento.data_atualizacao = datetime.fromisoformat(str(row[2]))
         pagamento.situacao = row[4]
         pagamento.id_transacao = row[5]
         pagamento.servico_pagamento = row[6]

@@ -1,7 +1,6 @@
 import sqlite3
 
 import psycopg2
-import re
 
 
 class DatabaseHelper:

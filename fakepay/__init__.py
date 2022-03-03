@@ -12,8 +12,8 @@ TEMPLATE_PATH.append("./fakepay/views")
 app = Bottle()
 
 db_url = config.read_value("DATABASE_URL")
-db = DatabaseHelper(db_url = db_url)
-repo = RepositorioPagamentos(db=db)
+db = DatabaseHelper(db_url=db_url)
+repo = RepositorioPagamentos(db=db.connection)
 
 
 @app.route("/static/<filename:path>")
